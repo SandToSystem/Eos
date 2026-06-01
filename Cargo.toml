@@ -33,6 +33,31 @@ path = "bin/malloc_test.rs"
 name = "echo_timer"
 path = "bin/echo_timer.rs"
 
+# --- Self-checking algorithm demos (run on the Oracle ISS by tests/eos_demos.rs). ---
+[[bin]]
+name = "sorts"
+path = "bin/sorts.rs"
+
+[[bin]]
+name = "sieve"
+path = "bin/sieve.rs"
+
+[[bin]]
+name = "numerics"
+path = "bin/numerics.rs"
+
+[[bin]]
+name = "hanoi"
+path = "bin/hanoi.rs"
+
+[[bin]]
+name = "floyd"
+path = "bin/floyd.rs"
+
+[[bin]]
+name = "crc32"
+path = "bin/crc32.rs"
+
 # Bare-metal: no unwinder, so panics abort. `opt-level = "s"` keeps the
 # disassembly compact for the pedagogical reading without the un-optimised
 # prologue noise that obscures it.
