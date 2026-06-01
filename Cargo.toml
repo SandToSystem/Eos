@@ -58,6 +58,11 @@ path = "bin/floyd.rs"
 name = "crc32"
 path = "bin/crc32.rs"
 
+# Input-driven demo: a turn-based Snake game exercising the UART RX path.
+[[bin]]
+name = "snake"
+path = "bin/snake.rs"
+
 # Bare-metal: no unwinder, so panics abort. `opt-level = "s"` keeps the
 # disassembly compact for the pedagogical reading without the un-optimised
 # prologue noise that obscures it.
