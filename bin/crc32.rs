@@ -86,6 +86,9 @@ fn main() {
         );
     }
 
-    println!("crc32: check value = 0x{:08X}", crc32_table(&table, b"123456789"));
+    println!(
+        "crc32: check value = 0x{:08X}",
+        crc32_table(&table, b"123456789")
+    );
     println!("PASS crc32");
 }

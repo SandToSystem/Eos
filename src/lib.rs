@@ -95,6 +95,10 @@ unsafe extern "C" fn start() -> ! {
     let heap_end = core::ptr::addr_of!(_eheap) as usize;
     allocator::ALLOCATOR.init(heap_start, heap_end);
     hal::trap::init();
+    // Route UART RX through the external-interrupt path and unmask interrupts,
+    // so `getchar`/`try_getchar` are serviced by the trap handler rather than
+    // by polling the UART STATUS bit.
+    hal::irq::init();
 
     // Hand off to the user program.
     extern "Rust" {

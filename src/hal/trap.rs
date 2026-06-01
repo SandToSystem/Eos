@@ -6,9 +6,10 @@
 //! into a [`TrapFrame`] on the stack, hands a `&mut TrapFrame` to the Rust
 //! [`dispatch`] routine, restores the (possibly edited) frame, and `mret`s.
 //!
-//! Lab 3 only enables one trap source: the synchronous `ECALL` (`mcause`
-//! = 11). Async interrupts (MSI/MTI/MEI) are wired through `mie`/`mstatus` but
-//! not delivered until Lab 5, so any other cause reaching here is a contract
+//! Two trap sources are handled: the synchronous `ECALL` from M-mode (`mcause`
+//! = 11), and the machine *external* interrupt (`mcause` = interrupt-flag | 11),
+//! which the IRQ aggregator raises on a UART RX byte — that is what makes RX
+//! interrupt-driven (see [`crate::io::rx_isr`]). Any other cause is a contract
 //! violation and halts loudly.
 
 use crate::hal::halt::halt;
@@ -40,6 +41,9 @@ pub struct TrapFrame {
 
 /// Synchronous cause: environment call from M-mode.
 const CAUSE_ECALL_FROM_M: usize = 11;
+/// Asynchronous cause code: machine external interrupt (UART RX via the IRQ
+/// aggregator). Distinguished from `ECALL` by the interrupt flag.
+const CAUSE_MACHINE_EXTERNAL: usize = 11;
 /// `mcause` interrupt flag (MSB) — set for async interrupts, clear for traps.
 const CAUSE_INTERRUPT_FLAG: usize = 1 << (usize::BITS - 1);
 /// Halt code for an unexpected trap (kind-coded, see CLAUDE.md §4).
@@ -79,7 +83,14 @@ extern "C" fn rust_trap_handler(frame: &mut TrapFrame) {
         return;
     }
 
-    // Lab 3 delivers no async interrupts and no other synchronous trap.
+    if is_interrupt && code == CAUSE_MACHINE_EXTERNAL {
+        // UART RX: drain received bytes into the console ring. `mepc` already
+        // points at the interrupted instruction, so we just return and resume.
+        crate::io::rx_isr();
+        return;
+    }
+
+    // No other synchronous trap or async source is expected.
     halt(HALT_UNEXPECTED_TRAP);
 }
 

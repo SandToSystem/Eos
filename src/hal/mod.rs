@@ -6,6 +6,7 @@
 pub mod clint;
 pub mod csr;
 pub mod halt;
+pub mod irq;
 pub mod mmio;
 pub mod trap;
 pub mod uart;

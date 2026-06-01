@@ -75,7 +75,12 @@ fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
 #[no_mangle]
 fn main() {
     // --- GCD: two algorithms must agree, and match known answers. ---
-    let cases = [(48u64, 18u64, 6u64), (1071, 462, 21), (17, 5, 1), (100, 0, 100)];
+    let cases = [
+        (48u64, 18u64, 6u64),
+        (1071, 462, 21),
+        (17, 5, 1),
+        (100, 0, 100),
+    ];
     for (a, b, want) in cases {
         let r = gcd_recursive(a, b);
         let i = gcd_iterative(a, b);

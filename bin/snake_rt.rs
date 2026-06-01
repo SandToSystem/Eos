@@ -144,7 +144,9 @@ fn main() {
         }
         let eating = new_head == food;
         let tail = *snake.back().unwrap();
-        let hit_self = snake.iter().any(|&c| c == new_head && (eating || c != tail));
+        let hit_self = snake
+            .iter()
+            .any(|&c| c == new_head && (eating || c != tail));
         if hit_self {
             status = "dead";
             break;

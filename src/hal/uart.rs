@@ -84,18 +84,4 @@ impl Uart {
         Self::STATUS.write(Status::RX_VALID);
         Some(byte)
     }
-
-    /// Blocking receive: spin until a byte arrives, then pop and return it.
-    ///
-    /// For interrupt-driven RX, enable the IRQ-aggregator UART-RX bit plus
-    /// `mie.MEIE` and sleep on `wfi` instead of busy-waiting here.
-    #[inline]
-    pub fn get_byte(&self) -> u8 {
-        loop {
-            if let Some(byte) = self.try_get_byte() {
-                return byte;
-            }
-            core::hint::spin_loop();
-        }
-    }
 }

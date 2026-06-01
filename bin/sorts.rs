@@ -198,14 +198,22 @@ fn main() {
     }
 
     // Binary search over the sorted reference: present and absent keys.
-    assert_eq!(binary_search(&reference, 0), Some(0), "bsearch: first element");
+    assert_eq!(
+        binary_search(&reference, 0),
+        Some(0),
+        "bsearch: first element"
+    );
     assert_eq!(
         binary_search(&reference, (N - 1) as i32),
         Some(N - 1),
         "bsearch: last element"
     );
     assert_eq!(binary_search(&reference, -1), None, "bsearch: below range");
-    assert_eq!(binary_search(&reference, N as i32), None, "bsearch: above range");
+    assert_eq!(
+        binary_search(&reference, N as i32),
+        None,
+        "bsearch: above range"
+    );
     println!("PASS binary_search");
 
     println!("sorts: all algorithms agree");
