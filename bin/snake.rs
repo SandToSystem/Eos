@@ -58,8 +58,13 @@ fn steer(key: u8, cur: Cell) -> Cell {
 }
 
 /// Draw the board: `#` walls, `@` head, `o` body, `*` food, `.` empty.
+///
+/// Each frame homes the cursor (`ESC [ H`) and overwrites the previous one in
+/// place — the board is a fixed size and every cell is rewritten, so a plain
+/// home (no clear) is flicker-free. On a dumb sink the escape is inert text.
 fn render(snake: &VecDeque<Cell>, food: Cell, score: u32) {
-    println!("score={score}");
+    print!("\x1b[H");
+    println!("snake  w/a/s/d move, q quit   score={score}");
     let head = *snake.front().unwrap();
     for y in 0..=(H + 1) {
         for x in 0..=(W + 1) {
@@ -82,7 +87,8 @@ fn render(snake: &VecDeque<Cell>, food: Cell, score: u32) {
 
 #[no_mangle]
 fn main() {
-    println!("snake: w/a/s/d to move, q to quit");
+    // Clear the screen once; every frame then redraws from the home position.
+    print!("\x1b[2J");
 
     // Head first. Start length 3, laid out horizontally, moving right.
     let mut snake: VecDeque<Cell> = VecDeque::from([(5, 4), (4, 4), (3, 4)]);
