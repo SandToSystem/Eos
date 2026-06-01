@@ -1,0 +1,47 @@
+[package]
+name = "runtime"
+version = "0.1.0"
+edition = "2021"
+description = "Snake SoC bare-metal RV32I runtime — HAL + stdlib + crt0, an idiomatic Rust rewrite of comporg-labs/runtime"
+license = "MIT"
+publish = false
+
+# The crate is a `no_std` library (HAL + stdlib + crt0). Each example program
+# under `bin/` is a freestanding `#![no_main]` binary that links against it and
+# provides its own `fn main`.
+[lib]
+name = "runtime"
+path = "src/lib.rs"
+
+[[bin]]
+name = "hello"
+path = "bin/hello.rs"
+
+[[bin]]
+name = "msort"
+path = "bin/msort.rs"
+
+[[bin]]
+name = "matmul"
+path = "bin/matmul.rs"
+
+[[bin]]
+name = "malloc_test"
+path = "bin/malloc_test.rs"
+
+[[bin]]
+name = "echo_timer"
+path = "bin/echo_timer.rs"
+
+# Bare-metal: no unwinder, so panics abort. `opt-level = "s"` keeps the
+# disassembly compact for the pedagogical reading without the un-optimised
+# prologue noise that obscures it.
+[profile.dev]
+panic = "abort"
+opt-level = 1
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+codegen-units = 1

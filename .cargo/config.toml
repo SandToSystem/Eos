@@ -1,0 +1,14 @@
+# Snake SoC target: RV32I_Zicsr, soft-float, no M/A/F/D/C extensions
+# (CLAUDE.md §4 — software multiply/divide come from compiler-builtins'
+# __mulsi3 / __divsi3, so plain `*` and `/` on i32 just work).
+#
+# The `riscv32i-unknown-none-elf` target is the base-integer ISA; Zicsr's CSR
+# instructions are emitted via inline asm in `src/hal/csr.rs` and accepted by
+# the assembler without an explicit feature flag on this target.
+[build]
+target = "riscv32i-unknown-none-elf"
+
+[target.riscv32i-unknown-none-elf]
+# `build.rs` drops link.ld into OUT_DIR and adds it to the link-search path;
+# here we just tell the linker to use it as the script.
+rustflags = ["-C", "link-arg=-Tlink.ld"]
